@@ -25,4 +25,9 @@ var self = exports.config = {
 	ininity : 1000000000000,
 	searchTimeOut : 5000,
 	enPassantCode : 33,
+	emptySquareCode : 46,
+	piecesCodeMap : {
+		0 : [98, 110, 112, 113, 114],
+		1 : [66, 78, 80, 81, 82],
+	},
 };

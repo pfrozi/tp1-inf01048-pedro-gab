@@ -13,20 +13,36 @@ var config = require('./config.js').config;
  * Definição do objeito
  */
 var self = exports.rule = {
-	possibleMovesMap : {
+	possibleDirectionsMap : {
 		0 : {
-			113 : self.whiteQueenPossibleMoves,
-			114 : self.whiteTowerPossibleMoves,
-			98 : self.whiteBishopPossibleMoves,
-			110 : self.whiteKnightPossibleMoves,
-			112 : self.whitePawnPossibleMoves,
+			113 : [[-1,-1],[1,1],[-1,1],[1,-1],[0,1],[0,-1],[1,0],[-1,0]],
+			114 : [[0,1],[1,0],[0,-1],[-1,0]],
+			98 : [[-1,-1],[1,1],[-1,1],[1,-1]],
+			110 : [[2,-1],[2,1],[1,2],[-1,2]],
+			112 : [[1,-1],[1,1],[1,0],[2,0]],
 		},
 		1 : {
-			81 : self.blackQueenPossibleMoves,
-			82 : self.blackTowerPossibleMoves,
-			66 : self.blackBishopPossibleMoves,
-			78 : self.blackKnightPossibleMoves,
-			80 : self.blackPawnPossibleMoves,
+			81 : [[-1,-1],[1,1],[-1,1],[1,-1],[0,1],[0,-1],[1,0],[-1,0]],
+			82 : [[0,1],[1,0],[0,-1],[-1,0]],
+			66 : [[-1,-1],[1,1],[-1,1],[1,-1]],
+			78 : [[2,-1],[2,1],[1,2],[-1,2]],
+			80 : [[-1,1],[-1,-1],[-1,0],[-2,0]],
+		},
+	},
+	nextMovesMap : {
+		0 : {
+			113 : self.queenNextMoves,
+			114 : self.towerNextMoves,
+			98 : self.bishopNextMoves,
+			110 : self.knightNextMoves,
+			112 : self.pawnNextMoves,
+		},
+		1 : {
+			81 : self.queenNextMoves,
+			82 : self.towerNextMoves,
+			66 : self.bishopNextMoves,
+			78 : self.knightNextMoves,
+			80 : self.pawnNextMoves,
 		},
 	},
 	possibleMoves : function(board, player) {
@@ -35,103 +51,121 @@ var self = exports.rule = {
 		var boardIndexes = config.boardIndexes;
 		for(var i in boardIndexes) {
 			for(var j in boardIndexes[i]) {
-				var playerPossibleMoves = self.possibleMovesMap[player];
-				var piece = board[boardIndexes[i][j]];
-				var piecePossibleMoves = playerPossibleMoves[piece];
-				possibleMoves.push(piecePossibleMoves(board, [i, j]));
+				var piecePossibleMoves = piecePossibleMoves(board, player, [i, j]);
+				possibleMoves = possibleMoves.concat(piecePossibleMoves);
 			}
 		}
 		
 		return possibleMoves;
 	},
-	whiteQueenPossibleMoves : function(board, position) {
+	piecePossibleMoves : function(board, player, position) {
 		var possibleMoves = [];
-
-		/*
-		 * Return the possible boards by moving the white queen
-		 */
+		var pieceIndex = config.boardIndexes[position[0]][position[1]];
+		var piece = board[pieceIndex];
+		var possibleDirections = self.possibleDirectionsMap[player][piece];
+		var pieceNextMoves = self.nextMovesMap[player][piece];
+		
+		if(pieceNextMoves) {
+			for(var i in possibleDirections) {
+				var direction = possibleDirections[i];
+				pieceNextMoves = pieceNextMoves(board, player, position, direction);
+				possibleMoves = possibleMoves.concat(pieceNextMoves);
+			}
+		}
 		
 		return possibleMoves;
 	},
-	whiteTowerPossibleMoves : function(board, position) {
-		var possibleMoves = [];
+	pieceNextMoves : function(board, player, position, direction) {
+		var nextMoves = [];
+		var row = position[0];
+		var col = position[1];
+		var nextRow = row + direction[0];
+		var nextCol = col + direction[1];
+		var nextIndex = config.boardIndexes[nextRow][nextCol];
 		
-		/*
-		 * Return the possible boards by moving the white tower
-		 */
+		if(nextIndex) {
+			var nextSquare = board[nextIndex];
+			var piecesCode = config.piecesCodeMap[player];
+			
+			if(piecesCode.indexOf(nextSquare) < 0) {
+				var index = config.boardIndexes[row][col];
+				var nextBoard = new Buffer();
+				board.copy(nextBoard);
+				
+				nextBoard[nextIndex] = board[index];
+				nextBoard[index] = config.emptySquareCode;
+				nextMoves.push(nextBoard);
+				
+				var enemyPiecesCode = config.piecesCodeMap[player^1];
+				if(enemyPiecesCode.indexOf(nextSquare) < 0) {
+					var nextPosition = [nextRow, nextCol];
+					var pieceNextMoves = self.pieceNextMoves(nextBoard, player, nextPosition, direction);
+					nextMoves = nextMoves.concat(pieceNextMoves);
+				}
+			}
+		}
 		
-		return possibleMoves;
+		return nextMoves;
 	},
-	whiteBishopPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the white bishop
-		 */
-		
-		return possibleMoves;
+	queenNextMoves : function(board, player, position, direction) {
+		return self.pieceNextMoves(board, player, position, direction);
 	},
-	whiteKnightPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the white knight
-		 */
-		
-		return possibleMoves;
+	towerNextMoves : function(board, player, position, direction) {
+		return self.pieceNextMoves(board, player, position, direction);
 	},
-	whitePawnPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the white pawn
-		 */
-		
-		return possibleMoves;
+	bishopNextMoves : function(board, player, position, direction) {
+		return self.pieceNextMoves(board, player, position, direction);
 	},
-	blackQueenPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-
-		/*
-		 * Return the possible boards by moving the black queen
-		 */
+	knighNextMoves : function(board, player, position, direction) {
+		var nextMoves = [];
+		var row = position[0];
+		var col = position[1];
+		var nextRow = row + direction[0];
+		var nextCol = col + direction[1];
+		var nextIndex = config.boardIndexes[nextRow][nextCol];
 		
-		return possibleMoves;
+		if(nextIndex) {
+			var nextSquare = board[nextIndex];
+			var piecesCode = config.piecesCodeMap[player];
+			
+			if(piecesCode.indexOf(nextSquare) < 0) {
+				var nextBoard = new Buffer();
+				board.copy(nextBoard);
+				
+				nextBoard[nextIndex] = board[index];
+				nextBoard[index] = config.emptySquareCode;
+				nextMoves.push(nextBoard);
+			}
+		}
+		
+		return nextMoves;
 	},
-	blackTowerPossibleMoves : function(board, position) {
-		var possibleMoves = [];
+	pawnNextMoves : function(board, player, position, direction) {
+		var nextMoves = [];
+		var row = position[0];
+		var col = position[1];
+		var nextRow = row + direction[0];
+		var nextCol = col + direction[1];
+		var nextIndex = config.boardIndexes[nextRow][nextCol];
 		
-		/*
-		 * Return the possible boards by moving the black tower
-		 */
+		if(nextIndex) {
+			var nextSquare = board[nextIndex];
+			var piecesCode = config.piecesCodeMap[player];
+			
+			if(piecesCode.indexOf(nextSquare) < 0) {
+				/*
+				 * Para completar
+				 */
+				
+				var nextBoard = new Buffer();
+				board.copy(nextBoard);
+				
+				nextBoard[nextIndex] = board[index];
+				nextBoard[index] = config.emptySquareCode;
+				nextMoves.push(nextBoard);
+			}
+		}
 		
-		return possibleMoves;
-	},
-	blackBishopPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the black bishop
-		 */
-		
-		return possibleMoves;
-	},
-	blackKnightPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the black knight
-		 */
-		
-		return possibleMoves;
-	},
-	blackPawnPossibleMoves : function(board, position) {
-		var possibleMoves = [];
-		
-		/*
-		 * Return the possible boards by moving the black pawn
-		 */
-		
-		return possibleMoves;
+		return nextMoves;
 	},
 };
