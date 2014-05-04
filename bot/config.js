@@ -14,6 +14,7 @@ var self = exports.config = {
 	botName : 'Gabriel e Pedro',
 	boardWidth : 8,
 	boardHeight : 8,
+	boardSize : 64,
 	boardIndexes : [[56, 57, 58, 59, 60, 61, 62, 63],
 	                [48, 49, 50, 51, 52, 53, 54, 55],
 	                [40, 41, 42, 43, 44, 45, 46, 47],
@@ -27,7 +28,7 @@ var self = exports.config = {
 	enPassantCode : 33,
 	emptySquareCode : 46,
 	piecesCodeMap : {
-		0 : [98, 110, 112, 113, 114],
-		1 : [66, 78, 80, 81, 82],
+		0 : [66, 78, 80, 81, 82],
+		1 : [98, 110, 112, 113, 114],
 	},
 };

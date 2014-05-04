@@ -31,7 +31,6 @@ var self = exports.minimax = {
 		/*
 		 * To send the best move
 		 */
-		console.log(value);
 		callback([1,1],[2,1]);
 	},
 	maxValue : function(board, alpha, beta) {

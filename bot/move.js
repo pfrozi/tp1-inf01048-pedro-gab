@@ -101,15 +101,14 @@ var self = exports.move = {
 				
 				if(piecesCode.indexOf(nextSquare) < 0) {
 					var index = config.boardIndexes[row][col];
-					var nextBoard = new Buffer(config.boardIndexes.length);
+					var nextBoard = new Buffer(config.boardSize);
 					board.copy(nextBoard);
 					
 					nextBoard[nextIndex] = board[index];
 					nextBoard[index] = config.emptySquareCode;
 					nextMoves.push(nextBoard);
-					
-					var enemyPiecesCode = config.piecesCodeMap[player^1];
-					if(enemyPiecesCode.indexOf(nextSquare) < 0) {
+										
+					if(nextSquare == config.emptySquareCode) {
 						var nextPosition = [nextRow, nextCol];
 						var pieceNextMoves = self.pieceNextMoves(nextBoard, player, nextPosition, direction);
 						nextMoves = nextMoves.concat(pieceNextMoves);
@@ -145,7 +144,7 @@ var self = exports.move = {
 				
 				if(piecesCode.indexOf(nextSquare) < 0) {
 					var index = config.boardIndexes[row][col];
-					var nextBoard = new Buffer(config.boardIndexes.length);
+					var nextBoard = new Buffer(config.boardSize);
 					board.copy(nextBoard);
 					
 					nextBoard[nextIndex] = board[index];
@@ -190,7 +189,7 @@ var self = exports.move = {
 					
 					if(moveIsPossible) {
 						var index = config.boardIndexes[row][col];
-						var nextBoard = new Buffer(config.boardIndexes.length);
+						var nextBoard = new Buffer(config.boardSize);
 						board.copy(nextBoard);
 						
 						nextBoard[nextIndex] = board[index];
