@@ -33,6 +33,14 @@ var self = exports.config = {
 		0 : [66, 78, 80, 81, 82],
 		1 : [98, 110, 112, 113, 114],
 	},
+	pawnsCodeMap : {
+		0 : 82,
+		1 : 114,
+	},
+	lastRowMap : {
+		0 : 7,
+		1 : 0,
+	},
     piecesNames : {
         113 : 'Queen',
         114 : 'Tower',

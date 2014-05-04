@@ -8,7 +8,6 @@
  */
 var config = require('./config.js').config;
 var move = require('./move.js').move;
-var weighting = require('./weighting.js').weighting;
 
 
 /*
@@ -32,9 +31,6 @@ var self = exports.minimax = {
 		
         self.boardFrom = board;
         var value = self.maxValue(board, -config.infinity, config.infinity,0);
-		/*
-		 * To send the best move
-		 */
         
         // console.log('Value of best decision');
         // console.log(value);
@@ -45,7 +41,7 @@ var self = exports.minimax = {
 	maxValue : function(board, alpha, beta,depth) {
 		
         if(self.timeIsOut() || depth>config.depthMax) {
-			return weighting.evaluate(board);
+			return board.value;
 		}
         var nextBoards = move.possibleMoves(board, self.maxPlayer);
 		if(!nextBoards) {
@@ -72,7 +68,7 @@ var self = exports.minimax = {
 	minValue : function(board, alpha, beta,depth) {
 		
         if(self.timeIsOut() || depth>config.depthMax) {
-			return weighting.evaluate(board);
+			return board.value;
 		}
         var nextBoards = move.possibleMoves(board, self.minPlayer);
 		if(!nextBoards) {

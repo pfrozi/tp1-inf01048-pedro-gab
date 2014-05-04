@@ -62,9 +62,7 @@ var self = exports.move = {
 		for(var i = 0; i < boardIndexes.length; i++) {
 			for(var j = 0; j < boardIndexes[i].length; j++) {
 				var piecePossibleMoves = self.piecePossibleMoves(board, player, [i, j]);
-                if(piecePossibleMoves && piecePossibleMoves.length>0){
-                    possibleMoves = possibleMoves.concat(piecePossibleMoves);
-                }
+				possibleMoves = possibleMoves.concat(piecePossibleMoves);
 			}
 		}
 		
@@ -80,11 +78,8 @@ var self = exports.move = {
 		if(pieceNextMovesFunction) {
 			for(var i in possibleDirections) {
 				var direction = possibleDirections[i];
-                
 				var pieceNextMoves = pieceNextMovesFunction(board, player, position, direction);
-				if(pieceNextMoves && pieceNextMoves.length>0){
-                    possibleMoves = possibleMoves.concat(pieceNextMoves);
-                }
+				possibleMoves = possibleMoves.concat(pieceNextMoves);
 			}
 		}
 		
@@ -116,9 +111,7 @@ var self = exports.move = {
 					if(nextSquare == config.emptySquareCode) {
 						var nextPosition = [nextRow, nextCol];
 						var pieceNextMoves = self.pieceNextMoves(nextBoard, player, nextPosition, direction);
-						if(pieceNextMoves && pieceNextMoves.length>0){
-                            nextMoves = nextMoves.concat(pieceNextMoves);
-                        }
+						nextMoves = nextMoves.concat(pieceNextMoves);
 					}
 				}
 			}
@@ -168,12 +161,11 @@ var self = exports.move = {
 		var row = position[0];
 		var nextRow = row + direction[0];
 		var nextRowIndexes = config.boardIndexes[nextRow];
-		//console.log('p');
+		
 		if(nextRowIndexes) {
 			var col = position[1];
 			var nextCol = col + direction[1];
 			var nextIndex = nextRowIndexes[nextCol];
-            //console.log(nextIndex);
 			if(nextIndex) {
 				var nextSquare = board[nextIndex];
 				var piecesCode = config.piecesCodeMap[player];
@@ -198,9 +190,6 @@ var self = exports.move = {
 						var index = config.boardIndexes[row][col];
 						var nextBoard = new Buffer(config.boardSize);
 						board.copy(nextBoard);
-                        
-                        // console.log([row,col]);
-                        // console.log([nextRow,nextCol]);
 						
 						nextBoard[nextIndex] = board[index];
 						nextBoard[index] = config.emptySquareCode;
