@@ -27,11 +27,12 @@ var self = exports.minimax = {
 		self.alphaBetaSearch(board, callback);
 	},
 	alphaBetaSearch : function(board, callback) {
-		var value = maxValue(board, -config.ininity, config.ininity);
+		var value = self.maxValue(board, -config.ininity, config.ininity);
 		/*
 		 * To send the best move
 		 */
-		callback(/* from, to (Best move) */);
+		console.log(value);
+		callback([1,1],[2,1]);
 	},
 	maxValue : function(board, alpha, beta) {
 		var nextBoards = move.possibleMoves(board, self.maxPlayer);
@@ -40,7 +41,7 @@ var self = exports.minimax = {
 		}
 		var value = -config.ininity;
 		for(var i in nextBoards) {
-			value = Math.max(value, minValue(nextBoards[i], alpha, beta));
+			value = Math.max(value, self.minValue(nextBoards[i], alpha, beta));
 		}
 		if(value >= beta) {
 			return value;
@@ -55,7 +56,7 @@ var self = exports.minimax = {
 		}
 		var value = config.ininity;
 		for(var i in nextBoards) {
-			value = Math.min(value, maxValue(nextBoards[i], alpha, beta));
+			value = Math.min(value, self.maxValue(nextBoards[i], alpha, beta));
 		}
 		if(value <= alpha) {
 			return value;

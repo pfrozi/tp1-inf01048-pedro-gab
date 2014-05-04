@@ -11,5 +11,6 @@ var self = exports.weighting = {
 		/*
 		 * Return differents weighting for different boards
 		 */
+		return 500;
 	},
 };
