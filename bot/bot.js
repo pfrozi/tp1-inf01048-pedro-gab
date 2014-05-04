@@ -2,6 +2,8 @@
  * 
  */
 
+var logsEnabled = true;
+
 
 /*
  * Importação dos objeitos usados
@@ -19,15 +21,30 @@ var self = exports.bot = {
 	init : function(options) {		
 		var optionsLength = options.length;
 		
+        /*
 		var host = optionsLength == 3 ? options[2] : 'localhost';
 		var port = config.whitePort;
 		if(optionsLength == 4 && options[3] == 'black') {
 			self.color = config.black;
 			port = config.blackPort;
 		}
+		*/
+        var host = config.host;
+		var port = config.whitePort;
+        
+        if(config.botType=='black'){
+            self.color = config.black;
+			port = config.blackPort;
+        }
+        
+		minimax.init(self.color,self.color^1);
 		
-		minimax.init(self.color, self.color^1);
-		
+        if(logsEnabled){
+            console.log('Connection Details');
+            console.log('- Port: ' +port);
+            console.log('- Host: '+host);
+            console.log('- Name: '+ config.botName);
+        }
 		connection.init(port, host, self.sendName);
 		connection.listen(self.play);
 	},
@@ -37,9 +54,13 @@ var self = exports.bot = {
 		}));
 	},
 	play : function(boardStateString) {
-		var boardState = JSON.parse(boardStateString);
+		var boardState = JSON.parse(boardStateString); 
+        
+        if(logsEnabled)console.log(boardState);
+        
 		var canPlay = self.analyseBoardState(boardState, self.sendMove);
-		if(!canPlay) {
+		
+        if(!canPlay) {
 			console.log('Game over!');
 		}
 	},
@@ -48,6 +69,7 @@ var self = exports.bot = {
 		
 		if(canPlay) {
 			var board = new Buffer(boardState.board);
+            // console.log(board);
 			var enPassant = boardState.enPassant;
 			if(enPassant) {
 				var row = enPassant[0];

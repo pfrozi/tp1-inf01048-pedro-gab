@@ -8,9 +8,6 @@
  */
 var self = exports.weighting = {
 	evaluate : function(board) {
-		/*
-		 * Return differents weighting for different boards
-		 */
-		return 500;
+		return Math.floor((Math.random() * 10000.0) + 1.0);
 	},
 };

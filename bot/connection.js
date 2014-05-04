@@ -31,6 +31,7 @@ var self = exports.connection = {
 	send : function(data) {
 		self.socket.write(data, 'UTF8', function(){
 			console.log('Data sent!');
+            // console.log(data);
 		});
 	},
 	listen : function(callback) {

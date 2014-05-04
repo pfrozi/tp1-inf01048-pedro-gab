@@ -172,7 +172,7 @@ var self = exports.move = {
 		if(nextRowIndexes) {
 			var col = position[1];
 			var nextCol = col + direction[1];
-			var nextIndex = config.boardIndexes[nextRow][nextCol];
+			var nextIndex = nextRowIndexes[nextCol];
             //console.log(nextIndex);
 			if(nextIndex) {
 				var nextSquare = board[nextIndex];
@@ -184,7 +184,7 @@ var self = exports.move = {
 					if(direction[1] == 0) {
 						moveIsPossible = enemyPiecesCode.indexOf(nextSquare) < 0;
 						if(direction[0] % 2 == 0) {
-							var betweenRow = row + 1;
+							var betweenRow = row + direction[0]/Math.abs(direction[0]);
 							var betweenIndex = config.boardIndexes[betweenRow][nextCol];
 							var betweenSquare = board[betweenIndex];
 							moveIsPossible = moveIsPossible && (row == 1 || row == 6);
