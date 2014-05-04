@@ -62,7 +62,9 @@ var self = exports.move = {
 		for(var i = 0; i < boardIndexes.length; i++) {
 			for(var j = 0; j < boardIndexes[i].length; j++) {
 				var piecePossibleMoves = self.piecePossibleMoves(board, player, [i, j]);
-				possibleMoves = possibleMoves.concat(piecePossibleMoves);
+                if(piecePossibleMoves && piecePossibleMoves.length>0){
+                    possibleMoves = possibleMoves.concat(piecePossibleMoves);
+                }
 			}
 		}
 		
@@ -78,8 +80,11 @@ var self = exports.move = {
 		if(pieceNextMovesFunction) {
 			for(var i in possibleDirections) {
 				var direction = possibleDirections[i];
+                
 				var pieceNextMoves = pieceNextMovesFunction(board, player, position, direction);
-				possibleMoves = possibleMoves.concat(pieceNextMoves);
+				if(pieceNextMoves && pieceNextMoves.length>0){
+                    possibleMoves = possibleMoves.concat(pieceNextMoves);
+                }
 			}
 		}
 		
@@ -111,7 +116,9 @@ var self = exports.move = {
 					if(nextSquare == config.emptySquareCode) {
 						var nextPosition = [nextRow, nextCol];
 						var pieceNextMoves = self.pieceNextMoves(nextBoard, player, nextPosition, direction);
-						nextMoves = nextMoves.concat(pieceNextMoves);
+						if(pieceNextMoves && pieceNextMoves.length>0){
+                            nextMoves = nextMoves.concat(pieceNextMoves);
+                        }
 					}
 				}
 			}
@@ -161,11 +168,12 @@ var self = exports.move = {
 		var row = position[0];
 		var nextRow = row + direction[0];
 		var nextRowIndexes = config.boardIndexes[nextRow];
-		
+		//console.log('p');
 		if(nextRowIndexes) {
 			var col = position[1];
 			var nextCol = col + direction[1];
-			var nextIndex = nextRowIndexes[nextRow][nextCol];
+			var nextIndex = config.boardIndexes[nextRow][nextCol];
+            //console.log(nextIndex);
 			if(nextIndex) {
 				var nextSquare = board[nextIndex];
 				var piecesCode = config.piecesCodeMap[player];
@@ -176,7 +184,7 @@ var self = exports.move = {
 					if(direction[1] == 0) {
 						moveIsPossible = enemyPiecesCode.indexOf(nextSquare) < 0;
 						if(direction[0] % 2 == 0) {
-							var betweenRow = row + direction[0]/Math.abs(direction[0]);
+							var betweenRow = row + 1;
 							var betweenIndex = config.boardIndexes[betweenRow][nextCol];
 							var betweenSquare = board[betweenIndex];
 							moveIsPossible = moveIsPossible && (row == 1 || row == 6);
@@ -186,11 +194,13 @@ var self = exports.move = {
 						moveIsPossible = nextSquare == config.enPassantCode;
 						moveIsPossible = moveIsPossible || nextSquare != config.emptySquareCode;
 					}
-					
-					if(moveIsPossible) {
+                    if(moveIsPossible) {
 						var index = config.boardIndexes[row][col];
 						var nextBoard = new Buffer(config.boardSize);
 						board.copy(nextBoard);
+                        
+                        // console.log([row,col]);
+                        // console.log([nextRow,nextCol]);
 						
 						nextBoard[nextIndex] = board[index];
 						nextBoard[index] = config.emptySquareCode;
