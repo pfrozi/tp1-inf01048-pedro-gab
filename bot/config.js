@@ -26,7 +26,7 @@ var self = exports.config = {
 	                [8, 9, 10, 11, 12, 13, 14, 15],
 	                [0, 1, 2, 3, 4, 5, 6, 7]],
 	infinity : 1000000000000,
-	searchTimeOut : 5000,
+	searchTimeOut : 4990,
 	enPassantCode : 33,
 	emptySquareCode : 46,
 	piecesCodeMap : {
@@ -34,8 +34,8 @@ var self = exports.config = {
 		1 : [98, 110, 112, 113, 114],
 	},
 	pawnsCodeMap : {
-		0 : 82,
-		1 : 114,
+		0 : 80,
+		1 : 112,
 	},
 	lastRowMap : {
 		0 : 7,
