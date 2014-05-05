@@ -13,7 +13,6 @@ var self = exports.config = {
 	whitePort : 50100,
 	blackPort : 50200,
 	botName : 'Gabriel e Pedro',
-    botType: 'black',
 	boardWidth : 8,
 	boardHeight : 8,
     boardSize : 64,
