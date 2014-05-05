@@ -30,17 +30,17 @@ var self = exports.minimax = {
 	alphaBetaSearch : function(board, callback) {
 		
         self.boardFrom = board;
-        var value = self.maxValue(board, -config.infinity, config.infinity,0);
+        var value = self.maxValue(board, -config.infinity, config.infinity, 0);
         
         // console.log('Value of best decision');
         // console.log(value);
         var position = self.extractCoord(self.boardFrom, self.boardTo);
         
-		callback(self.boardFrom, self.boardTo);
+		callback(position[0], position[1]);
 	},
 	maxValue : function(board, alpha, beta, depth) {
 		
-        if(self.timeIsOut() || depth>config.depthMax) {
+        if(self.timeIsOut() || depth > config.depthMax) {
 			return board.value;
 		}
         var nextBoards = move.possibleMoves(board, self.maxPlayer);
@@ -67,7 +67,7 @@ var self = exports.minimax = {
 	},
 	minValue : function(board, alpha, beta, depth) {
 		
-        if(self.timeIsOut() || depth>config.depthMax) {
+        if(self.timeIsOut() || depth > config.depthMax) {
 			return board.value;
 		}
         var nextBoards = move.possibleMoves(board, self.minPlayer);

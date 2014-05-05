@@ -31,56 +31,21 @@ var self = exports.weighting = {
 			112 : 10,
 		},
 	},
-	evaluate : function(board) {
-		/*if(self.isWinning(board)) {
+	evaluate : function(boardFrom, boardTo, player, position) {
+		var row = position[0];
+		var col = position[1];
+		var piece = boardTo[config.boardIndexes[row][col]];
+		var lastRow = config.lastRowMap[player];
+		var enemyLastRow = config.lastRowMap[player^1];
+
+		if(piece == config.pawnsCodeMap[player] && row == lastRow) {
 			return self.winningWeighting;
-		} else if (self.isLosing(board)) {
+		} else if(piece == config.pawnsCodeMap[player^1] && row == enemyLastRow) {
 			return self.losingWeighting;
 		}
-		return comparePlayersPosition(board);*/
-		return Math.round(Math.random() * 10000);
-	},
-	isWinning : function(board) {
-		var boardIndexes = config.boardIndexes;
-		var lastRowIndexes = boardIndexes[config.lastRowMap[self.player]];
 		
-		for(var i in lastRowIndexes) {
-			var piece = lastRowIndexes[i];
-			if(config.piecesCodeMap[player].indexOf(piece) >= 0) {
-				return true;
-			} 
-		}
+		var oldPiece = boardTo[config.boardIndexes[row][col]];
 		
-		var hasEnemyPawns = false;
-		for(var i in boardIndexes) {
-			var piece = boardIndexes[i];
-			if(piece == config.pawnsCodeMap[player^1]) {
-				hasEnemyPawns = true;
-				break;
-			}
-		}
-		return !hasEnemyPawns;
-	},
-	isLosing : function(board) {
-		var boardIndexes = config.boardIndexes;
-		var firstRowIndexes = boardIndexes[config.lastRowMap[self.player^1]];
-		
-		for(var i in firstRowIndexes) {
-			var piece = firstRowIndexes[i];
-			if(config.piecesCodeMap[player^1].indexOf(piece) >= 0) {
-				return true;
-			} 
-		}
-		
-		var hasPawns = false;
-		for(var i in boardIndexes) {
-			var piece = boardIndexes[i];
-			if(piece == config.pawnsCodeMap[player]) {
-				hasPawns = true;
-				break;
-			}
-		}
-		return !hasPawns;
 	},
 	comparePlayersPosition : function(board) {
 		var boardIndexes = config.boardIndexes;
