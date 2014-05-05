@@ -48,5 +48,5 @@ var self = exports.config = {
         110 : 'Knight',
         112 : 'Pawn',
     },
-    depthMax : 3,
+    depthMax : 2,
 };

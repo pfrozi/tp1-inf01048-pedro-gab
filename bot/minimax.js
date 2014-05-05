@@ -41,11 +41,23 @@ var self = exports.minimax = {
 	maxValue : function(board, alpha, beta, depth) {
 		
         if(self.timeIsOut() || depth > config.depthMax) {
-			return board.value;
+			//console.log(board.value);
+            if(board.value){
+                return board.value;
+            }
+            else{
+                return config.infinity;
+            }
 		}
         var nextBoards = move.possibleMoves(board, self.maxPlayer);
 		if(!nextBoards) {
-			return board.value;
+            //console.log(board.value);
+			if(board.value){
+                return board.value;
+            }
+            else{
+                return config.infinity;
+            }
 		}
         
 		var value = -config.infinity;
@@ -53,9 +65,14 @@ var self = exports.minimax = {
             var decision = value; 
 			value = Math.max(value, self.minValue(nextBoards[i], alpha, beta, depth + 1));
             
+            
             if(depth == 0){
+                
                 if(value > decision){
+                    console.log(board.value + ' decision: ' + decision);
+                    console.log(nextBoards[i]);
                     self.boardTo = nextBoards[i];
+                    console.log(self.boardTo);
                 }
             }
         }
@@ -68,14 +85,27 @@ var self = exports.minimax = {
 	minValue : function(board, alpha, beta, depth) {
 		
         if(self.timeIsOut() || depth > config.depthMax) {
-			return board.value;
+            //console.log(board.value);
+			if(board.value){
+                return board.value;
+            }
+            else{
+                return -config.infinity;
+            }
 		}
         var nextBoards = move.possibleMoves(board, self.minPlayer);
 		if(!nextBoards) {
-			return board.value;
+			//console.log(board.value);
+            if(board.value){
+                return board.value;
+            }
+            else{
+                return -config.infinity;
+            }
 		}
 		var value = config.infinity;
 		for(var i in nextBoards) {
+            //console.log(board.value + ' decision: ' + value);
             value = Math.min(value, self.maxValue(nextBoards[i], alpha, beta, depth + 1));
         }
 		if(value <= alpha) {
@@ -88,15 +118,15 @@ var self = exports.minimax = {
         var coordFrom = null;
         var coordTo = null;
         
-        var rowMax = self.boardHeight;
-        var colMax = self.boardWidth;
-        var boardIdx = self.boardIndexes;
+        var rowMax = config.boardHeight;
+        var colMax = config.boardWidth;
+        var boardIdx = config.boardIndexes;
         
         ext:
         for(var i = 0; i < rowMax; i++) {
             for(var j = 0; j < colMax; j++) {
                 if(board1[boardIdx[i][j]] != board2[boardIdx[i][j]]) {
-                    if(board2[boardIdx[i][j]] == self.emptySquareCode) {
+                    if(board2[boardIdx[i][j]] == config.emptySquareCode) {
                         coordFrom = [i, j];
                     }
                     else {
@@ -110,11 +140,11 @@ var self = exports.minimax = {
             }
         }
         
-        // console.log(board1);
-        // console.log(board2);
+         console.log(board1);
+         console.log(board2);
         
-        // console.log(coordFrom);
-        // console.log(coordTo);
+        console.log(coordFrom);
+        console.log(coordTo);
         
         return [coordFrom, coordTo];
     },
