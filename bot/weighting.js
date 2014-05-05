@@ -33,40 +33,37 @@ var self = exports.weighting = {
 			112 : 10,
 		},
 	},
-	evaluate : function(boardFrom, boardTo, player, position) {
-		var row = position[0];
-		var col = position[1];
-		var piece = boardTo[config.boardIndexes[row][col]];
+	evaluate : function(board, player) {
+		var boardIndexes = config.boardIndexes;
 		var lastRow = config.lastRowMap[player];
-		var enemyLastRow = config.lastRowMap[player^1];
-
-		if(piece == config.pawnsCodeMap[player] && row == lastRow) {
-			return self.winningWeighting;
-		} else if(piece == config.pawnsCodeMap[player^1] && row == enemyLastRow) {
-			return self.losingWeighting;
+		var lastRowIndexes = boardIndexes[lastRow];
+		for(var i in lastRowIndexes) {
+			var piece = board[lastRowIndexes[i]];
+			if(piece == config.pawnsCodeMap[player]) {
+				return self.winningWeighting;
+			}
 		}
 		
-		var oldPiece = boardFrom[config.boardIndexes[row][col]];
-		if(config.piecesCodeMap[player^1].indexOf(oldPiece)) {
-			var weighting = self.weightingsMap[player][oldPiece];
-			if(weighting) {
-				return weighting * 100000;
-			}
-		} else if(config.piecesCodeMap[player].indexOf(oldPiece)) {
-			var weighting = self.weightingsMap[player^1][oldPiece];
-			if(weighting) {
-				return weighting;
-			}
-		} else {
-			if(oldPiece == config.enPassantCode) {
-				if(config.piecesCodeMap[player].indexOf(piece)) {
-					return self.enPassantWeighting * 100000;
-				} else if(config.piecesCodeMap[player^1].indexOf(piece)) {
-					return self.enPassantWeighting;
-				}
-			} else if(oldPiece == config.emptySquareCode) {
-				return self.emptyWeighting;
+		var enemyLastRow = config.lastRowMap[player^1];
+		var enemyLastRowIndexes = boardIndexes[enemyLastRow];
+		for(var i in enemyLastRowIndexes) {
+			var enemyPiece = board[enemyLastRowIndexes[i]];
+			if(enemyPiece == config.pawnsCodeMap[player^1]) {
+				return self.losingWeighting;
 			}
 		}
+		
+		var weighting = config.infinity / 2;
+		for(var i in boardIndexes) {
+			for(var j in boardIndexes) {
+				var piece = boardIndexes[i][j];
+				if(config.piecesCodeMap[player].indexOf(piece) >= 0) {
+					weighting += self.weightingsMap[player][piece];
+				} else if(config.piecesCodeMap[player^1].indexOf(piece) >= 0) {
+					weighting -= self.weightingsMap[player^1][piece];
+				}
+			}
+		}
+		return weighting;
 	},
 };

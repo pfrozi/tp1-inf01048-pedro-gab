@@ -8,6 +8,7 @@
  */
 var config = require('./config.js').config;
 var move = require('./move.js').move;
+var weighting = require('./weighting.js').weighting;
 
 
 /*
@@ -28,51 +29,29 @@ var self = exports.minimax = {
 		self.alphaBetaSearch(board, callback);
 	},
 	alphaBetaSearch : function(board, callback) {
-		
         self.boardFrom = board;
-        var value = self.maxValue(board, -config.infinity, config.infinity, 0);
+        self.maxValue(board, -config.infinity, config.infinity, 0);
         
-        // console.log('Value of best decision');
-        // console.log(value);
         var position = self.extractCoord(self.boardFrom, self.boardTo);
-
+        
         callback(position[0], position[1]);
 	},
 	maxValue : function(board, alpha, beta, depth) {
-		
         if(self.timeIsOut() || depth > config.depthMax) {
-			//console.log(board.value);
-            if(board.value){
-                return board.value;
-            }
-            else{
-                return config.infinity;
-            }
+        	return weighting.evaluate(board, self.maxPlayer);
 		}
         var nextBoards = move.possibleMoves(board, self.maxPlayer);
 		if(!nextBoards) {
-            //console.log(board.value);
-			if(board.value){
-                return board.value;
-            }
-            else{
-                return config.infinity;
-            }
+			return weighting.evaluate(board, self.maxPlayer);
 		}
-        
 		var value = -config.infinity;
 		for(var i in nextBoards) {
             var decision = value; 
 			value = Math.max(value, self.minValue(nextBoards[i], alpha, beta, depth + 1));
             
-            
             if(depth == 0){
-                
                 if(value > decision){
-                    console.log(board.value + ' decision: ' + decision);
-                    console.log(nextBoards[i]);
                     self.boardTo = nextBoards[i];
-                    console.log(self.boardTo);
                 }
             }
         }
@@ -83,29 +62,15 @@ var self = exports.minimax = {
 		return value;
 	},
 	minValue : function(board, alpha, beta, depth) {
-		
         if(self.timeIsOut() || depth > config.depthMax) {
-            //console.log(board.value);
-			if(board.value){
-                return board.value;
-            }
-            else{
-                return -config.infinity;
-            }
+        	return weighting.evaluate(board, self.maxPlayer);
 		}
         var nextBoards = move.possibleMoves(board, self.minPlayer);
 		if(!nextBoards) {
-			//console.log(board.value);
-            if(board.value){
-                return board.value;
-            }
-            else{
-                return -config.infinity;
-            }
+			return weighting.evaluate(board, self.maxPlayer);
 		}
 		var value = config.infinity;
 		for(var i in nextBoards) {
-            //console.log(board.value + ' decision: ' + value);
             value = Math.min(value, self.maxValue(nextBoards[i], alpha, beta, depth + 1));
         }
 		if(value <= alpha) {
