@@ -32,7 +32,7 @@ var self = exports.bot = {
         var host = config.host;
 		var port = config.whitePort;
         
-        if(config.botType=='black'){
+        if(config.botType == 'black') {
             self.color = config.black;
 			port = config.blackPort;
         }
@@ -41,8 +41,8 @@ var self = exports.bot = {
 		
         if(logsEnabled){
             console.log('Connection Details');
-            console.log('- Port: ' +port);
-            console.log('- Host: '+host);
+            console.log('- Port: ' + port);
+            console.log('- Host: '+ host);
             console.log('- Name: '+ config.botName);
         }
 		connection.init(port, host, self.sendName);

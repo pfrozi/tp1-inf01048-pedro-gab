@@ -32,12 +32,13 @@ var self = exports.weighting = {
 		},
 	},
 	evaluate : function(board) {
-		if(self.isWinning(board)) {
+		/*if(self.isWinning(board)) {
 			return self.winningWeighting;
 		} else if (self.isLosing(board)) {
 			return self.losingWeighting;
 		}
-		return comparePlayersPosition(board);
+		return comparePlayersPosition(board);*/
+		return Math.round(Math.random() * 10000);
 	},
 	isWinning : function(board) {
 		var boardIndexes = config.boardIndexes;
@@ -97,8 +98,6 @@ var self = exports.weighting = {
 				}
 			}
 		}
-		
-		
 		
 		return weighting;
 	},

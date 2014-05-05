@@ -49,38 +49,4 @@ var self = exports.config = {
         112 : 'Pawn',
     },
     depthMax : 3,
-    extractCoord : function(board1,board2){
-        var coordFrom=null;
-        var coordTo=null;
-        
-        var rowMax = self.boardHeight;
-        var colMax = self.boardWidth;
-        var boardIdx = self.boardIndexes;
-        
-        ext:
-        for(var i=0;i<rowMax;i++){
-            for(var j=0;j<colMax;j++){
-                if(board1[boardIdx[i][j]]!=board2[boardIdx[i][j]]){
-                    if(board2[boardIdx[i][j]]==self.emptySquareCode){
-                        coordFrom = [i,j];
-                    }
-                    else{
-                        coordTo = [i,j];
-                    }
-                }
-                
-                if(coordFrom && coordTo){
-                    break ext;
-                }
-            }
-        }
-        
-        // console.log(board1);
-        // console.log(board2);
-        
-        // console.log(coordFrom);
-        // console.log(coordTo);
-        
-        return [coordFrom,coordTo];
-    },
 };

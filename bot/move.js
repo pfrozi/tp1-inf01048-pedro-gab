@@ -7,6 +7,7 @@
  * Importação dos objeitos usados
  */
 var config = require('./config.js').config;
+var weighting = require('./weighting.js').weighting;
 
 
 /*
@@ -103,6 +104,7 @@ var self = exports.move = {
 					var index = config.boardIndexes[row][col];
 					var nextBoard = new Buffer(config.boardSize);
 					board.copy(nextBoard);
+					board.value = weighting.evaluate(board);
 					
 					nextBoard[nextIndex] = board[index];
 					nextBoard[index] = config.emptySquareCode;
@@ -146,6 +148,7 @@ var self = exports.move = {
 					var index = config.boardIndexes[row][col];
 					var nextBoard = new Buffer(config.boardSize);
 					board.copy(nextBoard);
+					board.value = weighting.evaluate(board);
 					
 					nextBoard[nextIndex] = board[index];
 					nextBoard[index] = config.emptySquareCode;
@@ -190,6 +193,7 @@ var self = exports.move = {
 						var index = config.boardIndexes[row][col];
 						var nextBoard = new Buffer(config.boardSize);
 						board.copy(nextBoard);
+						board.value = weighting.evaluate(board);
 						
 						nextBoard[nextIndex] = board[index];
 						nextBoard[index] = config.emptySquareCode;
