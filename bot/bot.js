@@ -70,12 +70,12 @@ var self = exports.bot = {
 		connection.send(jsonMove);
 	},
 	canPlay : function(boardState) {
-		var canPlay = boardState.winner == 0;
-		canPlay = canPlay || boardState.white_infractions <= 5;
-		canPlay = canPlay || boardState.black_infractions <= 5;
-		canPlay = canPlay || !boardState['50moves'];
-		canPlay = canPlay || !boardState.draw;
-		
-		return canPlay;
+        var canPlay = boardState.winner == 0;
+        canPlay = canPlay && boardState.white_infractions <= 5;
+        canPlay = canPlay && boardState.black_infractions <= 5;
+        canPlay = canPlay && !boardState['50moves'];
+        canPlay = canPlay && !boardState.draw;
+        
+        return canPlay;
 	},
 };
