@@ -35,8 +35,8 @@ var self = exports.minimax = {
         // console.log('Value of best decision');
         // console.log(value);
         var position = self.extractCoord(self.boardFrom, self.boardTo);
-        
-		callback(position[0], position[1]);
+
+        callback(position[0], position[1]);
 	},
 	maxValue : function(board, alpha, beta, depth) {
 		

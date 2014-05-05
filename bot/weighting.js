@@ -15,6 +15,8 @@ var config = require('./config.js').config;
 var self = exports.weighting = {
 	winningWeighting : config.ininity,
 	losingWeighting : 0,
+	enPassantWeighting : 10,
+	emptyWeighting : 500000,
 	weightingsMap : {
 		0 : {
 			81 : 100000,
@@ -44,26 +46,27 @@ var self = exports.weighting = {
 			return self.losingWeighting;
 		}
 		
-		var oldPiece = boardTo[config.boardIndexes[row][col]];
-		
-	},
-	comparePlayersPosition : function(board) {
-		var boardIndexes = config.boardIndexes;
-		var weighting = self.winningWeighting / 2;
-		
-		for(var i in boardIndexes) {
-			for(var j in boardIndexes[i]) {
-				var piece = board[boardIndexes[i][j]];
-				var goodCaseWeighting = self.weightingsMap[self.player][piece];
-				var badCaseWeighting = self.weightingsMap[self.player^1][piece];
-				if(goodCaseWeighting) {
-					weighting += goodCaseWeighting * 10000000;
-				} else if(badCaseWeighting) {
-					weighting += badCaseWeighting;
+		var oldPiece = boardFrom[config.boardIndexes[row][col]];
+		if(config.piecesCodeMap[player^1].indexOf(oldPiece)) {
+			var weighting = self.weightingsMap[player][oldPiece];
+			if(weighting) {
+				return weighting * 100000;
+			}
+		} else if(config.piecesCodeMap[player].indexOf(oldPiece)) {
+			var weighting = self.weightingsMap[player^1][oldPiece];
+			if(weighting) {
+				return weighting;
+			}
+		} else {
+			if(oldPiece == config.enPassantCode) {
+				if(config.piecesCodeMap[player].indexOf(piece)) {
+					return self.enPassantWeighting * 100000;
+				} else if(config.piecesCodeMap[player^1].indexOf(piece)) {
+					return self.enPassantWeighting;
 				}
+			} else if(oldPiece == config.emptySquareCode) {
+				return self.emptyWeighting;
 			}
 		}
-		
-		return weighting;
 	},
 };
