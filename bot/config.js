@@ -25,7 +25,7 @@ var self = exports.config = {
 	                [8, 9, 10, 11, 12, 13, 14, 15],
 	                [0, 1, 2, 3, 4, 5, 6, 7]],
 	infinity : 1000000000000,
-	searchTimeOut : 4990,
+	searchTimeOut : 5500,
 	enPassantCode : 33,
 	emptySquareCode : 46,
 	piecesCodeMap : {
