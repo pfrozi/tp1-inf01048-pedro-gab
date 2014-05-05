@@ -56,7 +56,7 @@ var self = exports.weighting = {
 		var weighting = config.infinity / 2;
 		for(var i in boardIndexes) {
 			for(var j in boardIndexes) {
-				var piece = boardIndexes[i][j];
+				var piece = board[boardIndexes[i][j]];
 				if(config.piecesCodeMap[player].indexOf(piece) >= 0) {
 					weighting += self.weightingsMap[player][piece];
 				} else if(config.piecesCodeMap[player^1].indexOf(piece) >= 0) {
