@@ -104,13 +104,6 @@ var self = exports.minimax = {
                 }
             }
         }
-        
-         console.log(board1);
-         console.log(board2);
-        
-        console.log(coordFrom);
-        console.log(coordTo);
-        
         return [coordFrom, coordTo];
     },
 	timeIsOut : function() {
