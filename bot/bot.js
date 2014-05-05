@@ -18,9 +18,9 @@ var self = exports.bot = {
 	color : config.white,
 	init : function(options) {		
 		var optionsLength = options.length;
-		
 		var host = optionsLength == 3 ? options[2] : 'localhost';
 		var port = config.whitePort;
+		
 		if(optionsLength == 4 && options[3] == 'black') {
 			self.color = config.black;
 			port = config.blackPort;
@@ -37,10 +37,7 @@ var self = exports.bot = {
 		}));
 	},
 	play : function(boardStateString) {
-		var boardState = JSON.parse(boardStateString); 
-        
-        if(logsEnabled)console.log(boardState);
-        
+		var boardState = JSON.parse(boardStateString);         
 		var canPlay = self.analyseBoardState(boardState, self.sendMove);
 		
         if(!canPlay) {
