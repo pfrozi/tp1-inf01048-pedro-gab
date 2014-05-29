@@ -20,6 +20,8 @@ var self = exports.minimax = {
 	minPlayer : null,
     boardFrom: null,
     boardTo: null,
+    depthPoint: 0,
+    lasted4Play: [],
 	init : function(maxPlayer, minPlayer) {
 		self.maxPlayer = maxPlayer;
 		self.minPlayer = minPlayer;
@@ -30,9 +32,27 @@ var self = exports.minimax = {
 	},
 	alphaBetaSearch : function(board, callback) {
         self.boardFrom = board;
+        self.boardTo = null;
+        self.depthPoint = 0;
+        
         self.maxValue(board, -config.infinity, config.infinity, 0);
         
+        if(!self.boardTo){
+            console.log('Board To is null');
+            var nextBoards = move.possibleMoves(self.boardFrom, self.maxPlayer);
+            self.boardTo = nextBoards[0];
+        }
+        
         var position = self.extractCoord(self.boardFrom, self.boardTo);
+        
+        if(self.lasted4Play.length<4){
+            var boardBuff = new Buffer(config.boardSize);
+            self.boardTo.copy(boardBuff);
+            self.lasted4Play.push(boardBuff);
+        }
+        else{
+            self.lasted4Play = [];
+        }
         
         callback(position[0], position[1]);
 	},
@@ -44,41 +64,53 @@ var self = exports.minimax = {
 		if(!nextBoards) {
 			return weighting.evaluate(board, self.maxPlayer);
 		}
-		var value = -config.infinity;
+        
 		for(var i in nextBoards) {
-            var decision = value; 
-			value = Math.max(value, self.minValue(nextBoards[i], alpha, beta, depth + 1));
+            var decision = alpha; 
+			alpha = Math.max(alpha, self.minValue(nextBoards[i], alpha, beta, depth + 1));
             
             if(depth == 0){
-                if(value > decision){
+                self.depthPoint++;
+                samePlay = self.isSamePlay(nextBoards[i]);
+                
+                if(alpha > decision && !samePlay){
                     self.boardTo = nextBoards[i];
                 }
             }
+            if(alpha >= beta) {
+                break;
+            }
         }
-		if(value >= beta) {
-			return value;
-		}
-		alpha = Math.max(alpha, value);
-		return value;
+		
+		return alpha;
 	},
 	minValue : function(board, alpha, beta, depth) {
         if(self.timeIsOut() || depth > config.depthMax) {
-        	return weighting.evaluate(board, self.maxPlayer);
+        	return weighting.evaluate(board, self.minPlayer);
 		}
         var nextBoards = move.possibleMoves(board, self.minPlayer);
 		if(!nextBoards) {
-			return weighting.evaluate(board, self.maxPlayer);
+			return weighting.evaluate(board, self.minPlayer);
 		}
-		var value = config.infinity;
 		for(var i in nextBoards) {
-            value = Math.min(value, self.maxValue(nextBoards[i], alpha, beta, depth + 1));
+            beta = Math.min(beta, self.maxValue(nextBoards[i], alpha, beta, depth + 1));
+            
+            if(beta <= alpha) {
+                break;
+            }
         }
-		if(value <= alpha) {
-			return value;
-		}
-		beta = Math.min(beta, value);
-		return value;
+		return beta;
 	},
+    isSamePlay : function(board){
+        var equal = false;
+        for(var i=0;i<self.lasted4Play.length && !equal;i++){
+            var equal = true;
+            for(var j=0;j<board.length && equal;j++){
+                equal = equal && self.lasted4Play[i][j]==board[j];
+            }
+        }
+        return equal;
+    },
     extractCoord : function(board1, board2) {
         var coordFrom = null;
         var coordTo = null;
@@ -104,6 +136,14 @@ var self = exports.minimax = {
                 }
             }
         }
+        //console.log('Count of possible games: '+nextBoards.length);
+        console.log('depthPoint: '+self.depthPoint);
+        console.log('new Alpha: '+ weighting.evaluate(board2, self.maxPlayer));
+        console.log('Board From');
+        console.log(config.printBoard(board1));
+        console.log('Board To');
+        console.log(config.printBoard(board2));
+        
         return [coordFrom, coordTo];
     },
 	timeIsOut : function() {

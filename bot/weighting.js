@@ -13,7 +13,7 @@ var config = require('./config.js').config;
  * Definição do objeito
  */
 var self = exports.weighting = {
-	winningWeighting : config.ininity,
+	winningWeighting : config.infinity,
 	losingWeighting : 0,
 	enPassantWeighting : 10,
 	emptyWeighting : 500000,
@@ -52,8 +52,10 @@ var self = exports.weighting = {
 				return self.losingWeighting;
 			}
 		}
+        
+        
 		
-		var weighting = config.infinity / 2;
+		var weighting = self.winningWeighting / 2;
 		for(var i in boardIndexes) {
 			for(var j in boardIndexes) {
 				var piece = board[boardIndexes[i][j]];

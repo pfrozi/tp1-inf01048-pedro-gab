@@ -41,11 +41,30 @@ var self = exports.config = {
 		1 : 0,
 	},
     piecesNames : {
-        113 : 'Queen',
-        114 : 'Tower',
-        98  : 'Bishop',
-        110 : 'Knight',
-        112 : 'Pawn',
+        113 : ' bQueen  ',
+        114 : ' bTower  ',
+        98  : ' bBishop ',
+        110 : ' bKnight ',
+        112 : ' bPawn   ',
+        81  : ' bQueen  ',
+        82  : ' wTower  ',
+        66  : ' wBishop ',
+        78  : ' wKnight ',
+        80  : ' wPawn   ',
+        33  : ' passant ',
+        46  : '    .    ',
+    
     },
     depthMax : 3,
+    printBoard : function(board){
+    
+        var strBoard = '';
+        for(var i = 0; i < self.boardHeight; i++) {
+            for(var j = 0; j < self.boardWidth; j++) {
+                strBoard += self.piecesNames[board[self.boardIndexes[i][j]]];
+            }
+            strBoard += '\r\n';
+        }
+        return strBoard;
+    }
 };
