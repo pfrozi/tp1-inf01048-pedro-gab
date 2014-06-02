@@ -15,22 +15,21 @@ var config = require('./config.js').config;
 var self = exports.weighting = {
 	winningWeighting : config.infinity,
 	losingWeighting : 0,
-	enPassantWeighting : 10,
-	emptyWeighting : 500000,
+	enPassantWeighting : 100000,
 	weightingsMap : {
 		0 : {
-			81 : 100000,
-			82 : 10000,
-			66 : 1000,
-			78 : 10000,
-			80 : 100,
+			81 : 10000,
+			82 : 1000,
+			66 : 100,
+			78 : 100,
+			80 : 100000,
 		},
 		1 : {
-			113 : 100000,
-			114 : 10000,
-			98 : 1000,
-			110 : 10000,
-			112 : 100,
+			113 : 10000,
+			114 : 1000,
+			98 : 100,
+			110 : 100,
+			112 : 100000,
 		},
 	},
 	evaluate : function(board, player) {
@@ -53,8 +52,6 @@ var self = exports.weighting = {
 			}
 		}
         
-        
-		
 		var weighting = self.winningWeighting / 2;
 		for(var i in boardIndexes) {
 			for(var j in boardIndexes) {

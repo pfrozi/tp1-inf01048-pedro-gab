@@ -45,7 +45,7 @@ var self = exports.minimax = {
         
         var position = self.extractCoord(self.boardFrom, self.boardTo);
         
-        if(self.lasted4Play.length<4){
+        if(self.lasted4Play.length < 4){
             var boardBuff = new Buffer(config.boardSize);
             self.boardTo.copy(boardBuff);
             self.lasted4Play.push(boardBuff);
