@@ -1,8 +1,3 @@
-/**
- * 
- */
-
-
 /*
  * Importação dos objeitos usados
  */
@@ -13,9 +8,12 @@ var config = require('./config.js').config;
  * Definição do objeito
  */
 var self = exports.weighting = {
-	winningWeighting : config.infinity,
-	losingWeighting : 0,
-	enPassantWeighting : 100000,
+	winningWeighting : config.infinity, // A valor dum jogo ganhando
+	losingWeighting : 0, // A valor dum jogo perdendo
+	enPassantWeighting : 100000, // A valor dum movimento en passant
+	/*
+	 * A valor de cada peça de cada cor
+	 */
 	weightingsMap : {
 		0 : {
 			81 : 10000,
@@ -32,6 +30,13 @@ var self = exports.weighting = {
 			112 : 100000,
 		},
 	},
+	/*
+	 * Cálcula a valor do jogo, a valor esta winningWeighting
+	 * se a cor (player), losingWeighting se a cor (player) perde,
+	 * e a soma das valores das peças da cor (player) que ficam na
+	 * tabela menus a soma das valores negativas das peças da cor do
+	 * adversário da cor (player) que ficam na tabela.
+	 */
 	evaluate : function(board, player) {
 		var boardIndexes = config.boardIndexes;
 		var lastRow = config.lastRowMap[player];

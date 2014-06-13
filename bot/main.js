@@ -1,7 +1,3 @@
-/**
- * 
- */
- 
 /*
  * Importação dos objeitos usados
  */

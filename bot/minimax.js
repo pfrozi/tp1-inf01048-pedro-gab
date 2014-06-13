@@ -1,8 +1,3 @@
-/**
- * 
- */
-
-
 /*
  * Importação dos objeitos usados
  */
@@ -22,14 +17,25 @@ var self = exports.minimax = {
     boardTo: null,
     depthPoint: 0,
     lasted4Play: [],
+    /*
+     * Initialização do objeito, definição de quem
+     * é a cor a minimizar o score é quem é a cor a
+     * maximizar o score
+     */
 	init : function(maxPlayer, minPlayer) {
 		self.maxPlayer = maxPlayer;
 		self.minPlayer = minPlayer;
 	},
+	/*
+	 * Começa a busca minimax com poda alpha-beta
+	 */
 	analyseBoard : function(board, callback) {
 		self.time = new Date().getTime();
 		self.alphaBetaSearch(board, callback);
 	},
+	/*
+	 * Função principal do algoritmo minimax com poda alpha-beta
+	 */
 	alphaBetaSearch : function(board, callback) {
         self.boardFrom = board;
         self.boardTo = null;
@@ -56,6 +62,9 @@ var self = exports.minimax = {
         
         callback(position[0], position[1]);
 	},
+	/*
+	 * Cálculo da valor máxima do algoritmo minimax
+	 */
 	maxValue : function(board, alpha, beta, depth) {
         if(self.timeIsOut() || depth > config.depthMax) {
         	return weighting.evaluate(board, self.maxPlayer);
@@ -84,6 +93,9 @@ var self = exports.minimax = {
 		
 		return alpha;
 	},
+	/*
+	 * Cálculo da valor mínima do algoritmo minimax
+	 */
 	minValue : function(board, alpha, beta, depth) {
         if(self.timeIsOut() || depth > config.depthMax) {
         	return weighting.evaluate(board, self.minPlayer);
@@ -101,6 +113,10 @@ var self = exports.minimax = {
         }
 		return beta;
 	},
+	/*
+	 * Verifica se o movimento que o bot se prepara a fazer
+	 * e o mesmo que esse que ele faz antes
+	 */
     isSamePlay : function(board){
         var equal = false;
         for(var i=0;i<self.lasted4Play.length && !equal;i++){
@@ -111,6 +127,10 @@ var self = exports.minimax = {
         }
         return equal;
     },
+    /*
+     * A partir dos estados antes e depois dos movimentos,
+     * retorna o vetor de movimento que o bot vai fazer
+     */
     extractCoord : function(board1, board2) {
         var coordFrom = null;
         var coordTo = null;
@@ -136,16 +156,22 @@ var self = exports.minimax = {
                 }
             }
         }
-        //console.log('Count of possible games: '+nextBoards.length);
+        /*
+         * Para debugar
+         */
+        /*console.log('Count of possible games: '+nextBoards.length);
         console.log('depthPoint: '+self.depthPoint);
         console.log('new Alpha: '+ weighting.evaluate(board2, self.maxPlayer));
         console.log('Board From');
         console.log(config.printBoard(board1));
         console.log('Board To');
-        console.log(config.printBoard(board2));
+        console.log(config.printBoard(board2));*/
         
         return [coordFrom, coordTo];
     },
+    /*
+     * Testa se o tempo de busca (5.9) segundos esta terminado
+     */
 	timeIsOut : function() {
 		return new Date().getTime() - self.time >= config.searchTimeOut;
 	},

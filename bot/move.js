@@ -1,8 +1,3 @@
-/**
- * 
- */
-
-
 /*
  * Importação dos objeitos usados
  */
@@ -13,6 +8,10 @@ var config = require('./config.js').config;
  * Definição do objeito
  */
 var self = exports.move = {
+	/*
+	 * Os vetores de movimentos possiveis para cada peça de cada
+	 * cor
+	 */
 	possibleDirectionsMap : {
 		0 : {
 			81 : [[-1,-1],[1,1],[-1,1],[1,-1],[0,1],[0,-1],[1,0],[-1,0]],
@@ -29,6 +28,12 @@ var self = exports.move = {
 			112 : [[-1,1],[-1,-1],[-1,0],[-2,0]],
 		},
 	},
+	/*
+	 * As funções que calculam os jogos possíveis para cada peça
+	 * de cada cor a partir da tabela atual, da cor que vai jogar (player),
+	 * da posição atual da peça que esta mudando e a direção em qual
+	 * a peça começa a mudar.
+	 */
 	nextMovesMap : {
 		0 : {
 			81 : function(board, player, position, direction) { 
@@ -55,6 +60,10 @@ var self = exports.move = {
 					return self.pawnNextMoves(board, player, position, direction); },
 		},
 	},
+	/*
+	 * Calcula tudos os jogos possíveis para uma cor (player)
+	 * a partir da tabela atual.
+	 */
 	possibleMoves : function(board, player) {
 		var possibleMoves = [];
 		
@@ -68,6 +77,11 @@ var self = exports.move = {
 		
 		return possibleMoves;
 	},
+	/*
+	 * Calcula tudos os movimentos possíveis duma peça a partir de
+	 * sua posição atual, da tabela atual e da cor (player) que 
+	 * tem de jogar.
+	 */
 	piecePossibleMoves : function(board, player, position) {
 		var possibleMoves = [];
 		var pieceIndex = config.boardIndexes[position[0]][position[1]];
@@ -85,6 +99,10 @@ var self = exports.move = {
 		
 		return possibleMoves;
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos da peça à posição
+	 * position recursivamente.
+	 */
 	pieceNextMoves : function(board, player, position, direction) {
 		var nextMoves = [];
 		var row = position[0];
@@ -119,15 +137,31 @@ var self = exports.move = {
 		
 		return nextMoves;
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos da reina à posição
+	 * position recursivamente.
+	 */
 	queenNextMoves : function(board, player, position, direction) {
 		return self.pieceNextMoves(board, player, position, direction);
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos da torre à posição
+	 * position recursivamente.
+	 */
 	towerNextMoves : function(board, player, position, direction) {
 		return self.pieceNextMoves(board, player, position, direction);
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos do bispo à posição
+	 * position recursivamente.
+	 */
 	bishopNextMoves : function(board, player, position, direction) {
 		return self.pieceNextMoves(board, player, position, direction);
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos do cavalho à posição
+	 * position recursivamente.
+	 */
 	knightNextMoves : function(board, player, position, direction) {
 		var nextMoves = [];
 		var row = position[0];
@@ -156,6 +190,10 @@ var self = exports.move = {
 		
 		return nextMoves;
 	},
+	/*
+	 * Cálcula tudos os movimentos próximos do peão à posição
+	 * position recursivamente.
+	 */
 	pawnNextMoves : function(board, player, position, direction) {
 		var nextMoves = [];
 		var row = position[0];
