@@ -1,0 +1,1 @@
+Implementation dum bot que joga à batalha dos peoẽs usando o algoritmo minimax.
